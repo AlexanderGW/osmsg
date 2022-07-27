@@ -6,3 +6,15 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+windows = "0.39.0"
+features = [
+    "Data_Xml_Dom",
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_System_Threading",
+    "Win32_UI_WindowsAndMessaging",
+]
+
+# [target.'cfg(macos)'.dependencies]
+# [target.'cfg(unix)'.dependencies]
+# [target.'cfg(windows)'.dependencies]
