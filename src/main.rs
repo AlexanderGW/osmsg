@@ -5,12 +5,13 @@ use windows::{
     Data::Xml::Dom::*
 };
 
-fn main() {
-    let args: Vec<String> = env::args().collect();
-    println!("{:?}", args);
+fn main() -> windows::core::Result<()> {
+    env::set_var("RUST_BACKTRACE", "full");
 
     // Windows notification
     let output = if cfg!(target_os = "windows") {
+        let args: Vec<String> = env::args().collect();
+        println!("{:?}", args);
 
         // Get a toast XML template
         let toast_xml = ToastNotificationManager::GetTemplateContent(
@@ -19,19 +20,21 @@ fn main() {
 
         // Fill in the text elements
         let toast_text_elements = toast_xml.GetElementsByTagName(
-            &HSTRING::new()
-        ).unwrap(); // text
-        
+            &HSTRING::from("text")
+        ).unwrap();
+
         toast_text_elements
             .Item(0).unwrap()
-            .AppendChild(&toast_xml
+            .AppendChild(
+                &toast_xml
                 .CreateTextNode(&HSTRING::from("Hello from Rust!")).unwrap()
                 .cast::<IXmlNode>().unwrap()
             ).unwrap();
         
         toast_text_elements
             .Item(1).unwrap()
-            .AppendChild(&toast_xml
+            .AppendChild(
+                &toast_xml
                 .CreateTextNode(&HSTRING::from("This is some more text.")).unwrap()
                 .cast::<IXmlNode>().unwrap()
             ).unwrap();
@@ -50,11 +53,11 @@ fn main() {
     }
 
     else if cfg!(target_os = "macos") {
-
+        println!("Hi mac");
     }
     
     // Linux
-    else {
+    else if cfg!(target_os = "linux") {
 
         // KDE?
 
@@ -63,6 +66,13 @@ fn main() {
             .arg("foo bar")
             .output()
             .expect("");
+    }
+    
+    else {
+        println!("Not supported");
     };
+
     println!("{:?}", output);
+
+    Ok(())
 }
