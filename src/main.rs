@@ -10,6 +10,8 @@ fn main() -> windows::core::Result<()> {
 
     // Windows notification
     let output = if cfg!(target_os = "windows") {
+        let appUserModelID = &HSTRING::from("AlexanderGW.Osmsg");
+
         let args: Vec<String> = env::args().collect();
         println!("{:?}", args);
 
@@ -27,7 +29,7 @@ fn main() -> windows::core::Result<()> {
             .Item(0).unwrap()
             .AppendChild(
                 &toast_xml
-                .CreateTextNode(&HSTRING::from("Hello from Rust!")).unwrap()
+                .CreateTextNode(&HSTRING::from("osmsg")).unwrap()
                 .cast::<IXmlNode>().unwrap()
             ).unwrap();
         
@@ -35,7 +37,7 @@ fn main() -> windows::core::Result<()> {
             .Item(1).unwrap()
             .AppendChild(
                 &toast_xml
-                .CreateTextNode(&HSTRING::from("This is some more text.")).unwrap()
+                .CreateTextNode(&HSTRING::from("foobar")).unwrap()
                 .cast::<IXmlNode>().unwrap()
             ).unwrap();
 
@@ -45,7 +47,7 @@ fn main() -> windows::core::Result<()> {
         // Show the toast. Use PowerShell's App ID to circumvent the need to register one (this is only an example!).
         let result =
             ToastNotificationManager::CreateToastNotifierWithId(
-                &HSTRING::from("{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\\WindowsPowerShell\\v1.0\\powershell.exe")
+                &appUserModelID
             ).unwrap()
             .Show(&toast).unwrap();
         
@@ -63,7 +65,7 @@ fn main() -> windows::core::Result<()> {
 
         // Gnome
         Command::new("notify-send")
-            .arg("foo bar")
+            .arg("foobar")
             .output()
             .expect("");
     }
