@@ -1,15 +1,16 @@
 use std::env;
 use std::process::Command;
-use windows::{
-    core::*, UI::Notifications::*,
-    Data::Xml::Dom::*
-};
 
-fn main() -> windows::core::Result<()> {
+fn main() -> Result<(), std::io::Error> {
     env::set_var("RUST_BACKTRACE", "full");
 
     // Windows notification
     let output = if cfg!(target_os = "windows") {
+        use windows::{
+            core::*, UI::Notifications::*,
+            Data::Xml::Dom::*
+        };
+
         let appUserModelID = &HSTRING::from("AlexanderGW.Osmsg");
 
         let args: Vec<String> = env::args().collect();
