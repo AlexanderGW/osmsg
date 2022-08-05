@@ -56,7 +56,10 @@ fn main() -> Result<(), std::io::Error> {
     }
 
     else if cfg!(target_os = "macos") {
-        println!("Hi mac");
+        Command::new("/usr/bin/osascript")
+            .arg("-e")
+            .arg("display notification \"foobar\" with title \"osmsg\"")
+            .output();
     }
     
     // Linux
