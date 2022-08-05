@@ -59,7 +59,8 @@ fn main() -> Result<(), std::io::Error> {
         Command::new("/usr/bin/osascript")
             .arg("-e")
             .arg("display notification \"foobar\" with title \"osmsg\"")
-            .output();
+            .output()
+            .expect("");
     }
     
     // Linux
